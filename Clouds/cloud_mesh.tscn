@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://bf1yb21yx8nya"]
+
+[ext_resource type="PackedScene" uid="uid://6vyn3weertyr" path="res://Better World Environment/Clouds/cloud mesh.blend" id="1_vwpwi"]
+[ext_resource type="Script" uid="uid://blpgmxq5gdxci" path="res://Better World Environment/Clouds/cloud control.gd" id="2_2hg3y"]
+[ext_resource type="Shader" uid="uid://c4xffftwhguqo" path="res://Better World Environment/Clouds/Visual Shader Cloud.tres" id="2_5ui8f"]
+[ext_resource type="Shader" uid="uid://ci30qq8idtqgk" path="res://Better World Environment/Clouds/Visual Shader Cloud Shadow.tres" id="3_5ui8f"]
+
+[sub_resource type="Gradient" id="Gradient_oqemt"]
+offsets = PackedFloat32Array(0, 0.5107527)
+colors = PackedColorArray(1, 1, 1, 1, 0.18359044, 0.18359044, 0.18359044, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5ui8f"]
+gradient = SubResource("Gradient_oqemt")
+width = 24
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2hg3y"]
+frequency = 0.015
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_sqbkl"]
+generate_mipmaps = false
+noise = SubResource("FastNoiseLite_2hg3y")
+seamless = true
+
+[sub_resource type="Gradient" id="Gradient_by6gr"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(0.7835241, 0.78352314, 0.78352374, 1, 1, 1, 1, 1, 0.78352344, 0.7835234, 0.7835234, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4abwb"]
+gradient = SubResource("Gradient_by6gr")
+width = 24
+
+[sub_resource type="Gradient" id="Gradient_6y7i4"]
+offsets = PackedFloat32Array(0.9050179, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_d2fui"]
+gradient = SubResource("Gradient_6y7i4")
+width = 16
+height = 16
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_l50qn"]
+offsets = PackedFloat32Array(0.718638, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nkout"]
+gradient = SubResource("Gradient_l50qn")
+width = 24
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5w7n"]
+render_priority = 0
+shader = ExtResource("2_5ui8f")
+shader_parameter/far_cloud_fade_Gradient_2D = SubResource("GradientTexture2D_d2fui")
+shader_parameter/cloud_vertical_shape_Gradient_1D = SubResource("GradientTexture1D_4abwb")
+shader_parameter/mesh_scale = 200000.0
+shader_parameter/wind_resistance = 500.0
+shader_parameter/cloud_Noise_texture_2D = SubResource("NoiseTexture2D_sqbkl")
+shader_parameter/horizontal_expantion_Gradient_1D = SubResource("GradientTexture1D_nkout")
+shader_parameter/backlight_Gradient_1D = SubResource("GradientTexture1D_5ui8f")
+shader_parameter/triplanar_scale = Vector3(1, 1, 1)
+shader_parameter/triplanar_offset = Vector3(0, 0, 0)
+shader_parameter/triplanar_sharpness = 0.5
+
+[sub_resource type="Gradient" id="Gradient_5ui8f"]
+offsets = PackedFloat32Array(0, 0.78315413)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2hg3y"]
+gradient = SubResource("Gradient_5ui8f")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqbkl"]
+render_priority = 0
+shader = ExtResource("3_5ui8f")
+shader_parameter/mesh_scale = 200000.0
+shader_parameter/wind_resistance = 500.0
+shader_parameter/Cloud_Noise = SubResource("NoiseTexture2D_sqbkl")
+shader_parameter/shadow_expantion = SubResource("GradientTexture1D_2hg3y")
+shader_parameter/triplanar_scale = Vector3(1, 1, 1)
+shader_parameter/triplanar_offset = Vector3(0, 0, 0)
+shader_parameter/triplanar_sharpness = 0.5
+
+[node name="cloud mesh" unique_id=1405631585 instance=ExtResource("1_vwpwi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1467.1478, 0, 624.5111)
+top_level = true
+script = ExtResource("2_2hg3y")
+
+[node name="Cloud Canvas" parent="." index="0" unique_id=1263348785]
+transform = Transform3D(200000, 0, 0, 0, 20000, 0, 0, 0, 200000, 0, 6000, 0)
+material_override = SubResource("ShaderMaterial_l5w7n")
+cast_shadow = 0
+
+[node name="Cloud Shadows" parent="Cloud Canvas" index="0" unique_id=1715835628]
+material_override = SubResource("ShaderMaterial_sqbkl")
+cast_shadow = 3
